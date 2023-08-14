@@ -263,7 +263,7 @@ def sync_gcp_organizations(
     logger.error(f"GCP Organizations looks like this: {data}")
 
     logger.error(f"This is a hack to limit to 1 organization for now")
-    newdata = [d for d in data if d['displayName' like os.environ.get('CARTOGRAPHY_PROJECT_LIMIT', "")]
+    newdata = [d for d in data if d['displayName'] in os.environ.get('CARTOGRAPHY_PROJECT_LIMIT', "")]
     load_gcp_organizations(neo4j_session, newdata, gcp_update_tag)
     cleanup_gcp_organizations(neo4j_session, common_job_parameters)
 
