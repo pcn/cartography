@@ -342,7 +342,10 @@ def transform_gcp_forwarding_rules(fwd_response: Resource) -> List[Dict]:
         forwarding_rule['self_link'] = fwd.get('selfLink', None)
         target = fwd.get('target', None)
         if target:
-            forwarding_rule['target'] = _parse_compute_full_uri_to_partial_uri(target)
+            try:
+                forwarding_rule['target'] = _parse_compute_full_uri_to_partial_uri(target)
+            except IndexError as ie:  # Can fail with 'all-indexes as the uri?
+                forwarding_role['target'] = None
         else:
             forwarding_rule['target'] = None
 
