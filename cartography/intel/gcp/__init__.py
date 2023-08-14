@@ -202,12 +202,14 @@ def _sync_multiple_projects(
     logger.info("Syncing %d GCP projects.", len(projects))
     crm.sync_gcp_projects(neo4j_session, projects, gcp_update_tag, common_job_parameters)
 
+    import os
     for project in projects:
+        if os.environ.get("C_GCP_PROJECT_ID", None) and project["projectNumber"] != os.environ.get("C_GCP_PROJECT_ID", "0"):
+            continue
         logger.error(f"Here is a project: {project}")
         project_id = project['projectId']
         logger.info("Syncing GCP project %s.", project_id)
-        # XXX
-        # _sync_single_project(neo4j_session, resources, project_id, gcp_update_tag, common_job_parameters)
+        _sync_single_project(neo4j_session, resources, project_id, gcp_update_tag, common_job_parameters)
 
 
 @timeit
