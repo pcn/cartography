@@ -229,7 +229,11 @@ def _parse_compute_full_uri_to_partial_uri(full_uri: str, version: str = 'v1') -
     :param version: The version number; default to v1 since at the time of this writing v1 is the only Compute API.
     :return: Partial URI `{project}/{location specifier}/{subtype}/{resource name}`
     """
-    return full_uri.split(f'compute/{version}/')[1]
+    try:
+        return full_uri.split(f'compute/{version}/')[1]
+    except IndexError as ie:
+        logger.error(f"Tried to split full_uri: {full_uri} and failed")
+        raise
 
 
 def _create_gcp_network_tag_id(vpc_partial_uri: str, tag: str) -> str:
