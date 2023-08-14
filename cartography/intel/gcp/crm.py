@@ -260,6 +260,9 @@ def sync_gcp_organizations(
     """
     logger.debug("Syncing GCP organizations")
     data = get_gcp_organizations(crm_v1)
+    logger.error(f"GCP Organizations looks like this: {data}")
+    import sys
+    sys.exit(1)
     load_gcp_organizations(neo4j_session, data, gcp_update_tag)
     cleanup_gcp_organizations(neo4j_session, common_job_parameters)
 
